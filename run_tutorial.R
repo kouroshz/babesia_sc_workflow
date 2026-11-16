@@ -62,7 +62,7 @@ wt0_counts <- read_counts("input/WT0/filtered_feature_bc_matrix.h5")
 wt7_counts <- read_counts("input/WT7/filtered_feature_bc_matrix.h5")
 dim(wt0_counts)                   # Gene rows by Cell Ranger-called barcodes.
 dim(wt7_counts)
-# cbind() later assumes the same genes in the same order. Never silently mix
+# Both matrices should use the same reference gene list. Never silently mix
 # matrices aligned to different references or with reordered gene rows.
 stopifnot(identical(rownames(wt0_counts), rownames(wt7_counts)))
 wt0_raw <- raw_barcode_summary("input/WT0/raw_feature_bc_matrix.h5")
@@ -240,16 +240,30 @@ show_figure(DimPlot(integrated, group.by = "phase_display", split.by = "sample_i
     cols = phase_colors, ncol = 2),
   "output/figures/11_integrated_split_by_sample.png", SAVE_OUTPUTS, width = 14)
 
-# 9. Build the RNA test object from ALL gene rows in the final singlets ---------
-# The >=3-cell gene rule was for embedding. It must not silently change the DEG
-# denominator or the RNA library size. No integrated values enter this object.
-final_counts <- cbind(wt0_counts[, colnames(wt0)], wt7_counts[, colnames(wt7)])
-rna <- CreateSeuratObject(final_counts, min.cells = 0, min.features = 0)
-metadata <- rbind(wt0[[]][, c("sample_id", "phase", "phase_display")],
-  wt7[[]][, c("sample_id", "phase", "phase_display")])
-rna$sample_id <- metadata[colnames(rna), "sample_id"]
-rna$phase <- metadata[colnames(rna), "phase"]
-rna$phase_display <- metadata[colnames(rna), "phase_display"]
+# 9. Merge full-gene RNA objects for DEG, without integration -------------------
+# Keep only final singlets, but restore ALL input gene rows for each sample.
+# The >=3-cell gene rule was for embedding, not the DEG gene universe.
+wt0_metadata <- wt0[[]]
+wt7_metadata <- wt7[[]]
+# Preserve the embedding-assay QC summaries with explicit names. The new RNA
+# objects recompute nCount_RNA and nFeature_RNA using the complete gene set.
+names(wt0_metadata)[names(wt0_metadata) == "nCount_RNA"] <- "embedding_nCount_RNA"
+names(wt0_metadata)[names(wt0_metadata) == "nFeature_RNA"] <- "embedding_nFeature_RNA"
+names(wt7_metadata)[names(wt7_metadata) == "nCount_RNA"] <- "embedding_nCount_RNA"
+names(wt7_metadata)[names(wt7_metadata) == "nFeature_RNA"] <- "embedding_nFeature_RNA"
+rna0 <- CreateSeuratObject(wt0_counts[, colnames(wt0), drop = FALSE],
+  project = "WT0", min.cells = 0, min.features = 0, meta.data = wt0_metadata)
+rna7 <- CreateSeuratObject(wt7_counts[, colnames(wt7), drop = FALSE],
+  project = "WT7", min.cells = 0, min.features = 0, meta.data = wt7_metadata)
+
+# merge() combines cells and their metadata, without batch correction or summing
+# samples. Existing WT0_/WT7_ prefixes already give every cell a unique ID.
+rna <- merge(x = rna0, y = rna7, merge.data = FALSE, project = "WT0_WT7")
+Layers(rna[["RNA"]])             # Separate sample count layers before joining.
+rna <- JoinLayers(rna, assay = "RNA")
+Layers(rna[["RNA"]])             # One counts layer; sample_id remains metadata.
+# Keep the same G, SM, MC, C display order after merging sample metadata.
+rna$phase_display <- factor(rna$phase_display, levels = names(phase_colors))
 rna <- NormalizeData(rna, scale.factor = 10000, verbose = FALSE)
 DefaultAssay(rna) <- "RNA"
 dim(rna)                         # Full gene rows, not just embedding genes.

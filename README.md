@@ -63,7 +63,7 @@ Copy the `output/` folder first if you want to preserve an earlier trial.
 | 6 | Call doublets independently, rebuild singlets and refit | Doublet locations and cell/gene counts |
 | 7 | Attach the supplied WT0 annotations and transfer to WT7 | Native phase UMAPs and transfer confidence |
 | 8 | Reference-based RPCA integration | Joint and sample-split UMAPs, alongside native views |
-| 9 | Rebuild a full-gene RNA test object and inspect markers | Published phase markers and state proportions |
+| 9 | Merge full-gene RNA objects, join layers and inspect markers | Published phase markers and state proportions |
 | 10 | Compare all retained cold and warm cells | Whole-sample DEG table and volcano |
 | 11 | Compare cold and warm within G, SM, MC and C | Cell denominators and up/down DEG counts |
 | 12 | Save objects and tables for the next question | Readable CSVs and reusable RDS outputs |
@@ -183,9 +183,20 @@ comparison view, using WT0 as the reference. Integration can remove genuine
 cold effects because condition and library coincide in this two-sample example.
 **Integrated expression is never used for DEG.**
 
-For DEG, a separate RNA object is rebuilt from all input gene rows in the final
-singlets. This prevents the embedding-only gene filter from changing the test
-denominator or the RNA library totals.
+For DEG, a separate full-gene Seurat object is rebuilt for each sample using
+only its final singlets and all its cell metadata. Standard Seurat `merge()`
+combines those objects without integration. `JoinLayers()` then joins the
+sample count layers before normalization and `FindMarkers()`. Sample IDs and
+phase labels remain in metadata. No cells or counts are summed across samples.
+
+Restoring all input gene rows prevents the embedding-only gene filter from
+changing the test denominator or RNA library totals. The earlier embedding
+object's `nCount_RNA` and `nFeature_RNA` are preserved as
+`embedding_nCount_RNA` and `embedding_nFeature_RNA`; the new RNA assay computes
+its own summaries over the complete gene set. Other metadata, including
+doublet scores and available transfer-confidence scores, are retained.
+Saved cluster IDs remain sample-specific: WT0 cluster 0 is not automatically
+the same population as WT7 cluster 0.
 
 The direction is always **WT7 cold minus WT0**. Seurat's limma-backed Wilcoxon
 test supplies P-values, with `min.pct=0.10`, `logfc.threshold=0` and no cell cap. The reported

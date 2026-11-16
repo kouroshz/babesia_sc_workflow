@@ -37,6 +37,33 @@ the maximum log2FC difference is approximately `2.22e-16` and the maximum
 Bonferroni-P difference approximately `5.55e-17`, both numerical roundoff.
 Repeated runs on this computer produced identical whole and phase DEG tables.
 
+## Standard Seurat Merge Update
+
+On **16 November 2026**, section 9 was changed from manual count-matrix binding
+to two full-gene Seurat objects followed by `merge(merge.data=FALSE)`,
+`JoinLayers()` and `NormalizeData()`. No filtering, phase assignment or DEG
+settings changed.
+
+The changed section and all five downstream DEG comparisons were rerun from
+the original filtered count matrices, using the same final cells and phase
+metadata from the unchanged upstream tutorial outputs. The upstream QC/PCA/
+doublet/label-transfer steps were not repeated for this focused comparison.
+
+- The complete **4,129 genes x 15,103 cells** count matrix is identical.
+- Normalized RNA values and both phase-count tables are identical.
+- All upstream per-cell metadata values are retained. Embedding-assay count
+  and feature summaries are preserved as `embedding_nCount_RNA` and
+  `embedding_nFeature_RNA`. The full-gene RNA assay computes its own
+  `nCount_RNA` and `nFeature_RNA`.
+- Whole-sample and all four phase DEG tables are identical to both the old
+  construction and the previously saved tutorial results. Maximum differences
+  in log2FC, raw P-value and Bonferroni-adjusted P-value are **zero**.
+- The local test script, old/new code snapshots, log and machine-readable
+  equivalence report are in `output/validation/merge_workflow/` and excluded
+  from GitHub.
+- A bounded read-only Claude Opus 5.5 review of the merge/metadata change found
+  no blocking code defects. Numerical equivalence was checked separately in R.
+
 ## Additional Checks
 
 - Toy examples checked the CP10k fold-change formula, the minimum-cell guard
