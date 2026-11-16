@@ -1,0 +1,33 @@
+.DS_Store
+.Rhistory
+.RData
+.Rproj.user/
+Rplots.pdf
+*.h5
+*.h5ad
+*.bam
+*.fastq
+*.fastq.gz
+*.rds
+
+# Counts and vendor reports stay local, never on GitHub.
+input/WT0/*
+!input/WT0/.gitkeep
+input/WT7/*
+!input/WT7/.gitkeep
+
+# Generated figures, tables and RDS objects stay local.
+output/**
+!output/figures/
+!output/figures/.gitkeep
+!output/tables/
+!output/tables/.gitkeep
+!output/objects/
+!output/objects/.gitkeep
+
+renv/library/
+renv/staging/
+renv/local/
+renv/cellar/
+renv/lock/
+renv/python/

@@ -1,0 +1,13 @@
+phase,gene_id,description,published_log2FC,source
+G,Bdiv_024520,hypothetical protein,3.06104796274319,10.1371/journal.pbio.3001816; S3 Table; Bdiv_human
+G,Bdiv_023320c,conserved hypothetical protein,2.60013219560831,10.1371/journal.pbio.3001816; S3 Table; Bdiv_human
+G,Bdiv_005620c,"chaperonin cpn60, putative",2.5418169550064,10.1371/journal.pbio.3001816; S3 Table; Bdiv_human
+SM,Bdiv_000760c,hypothetical protein,3.19005601246642,10.1371/journal.pbio.3001816; S3 Table; Bdiv_human
+SM,Bdiv_030660,dihydrofolate reductase/thymidylate synthase,3.02045978195292,10.1371/journal.pbio.3001816; S3 Table; Bdiv_human
+SM,Bdiv_032340c,Plasmodium falciparum CPW-WPC domain containing protein,2.92214177046711,10.1371/journal.pbio.3001816; S3 Table; Bdiv_human
+MC,Bdiv_002680c,hypothetical protein,2.60874945687202,10.1371/journal.pbio.3001816; S3 Table; Bdiv_human
+MC,Bdiv_004940c,"membrane skeletal protein, putative",2.44363693435717,10.1371/journal.pbio.3001816; S3 Table; Bdiv_human
+MC,Bdiv_040360,conserved hypothetical protein,2.42811181800284,10.1371/journal.pbio.3001816; S3 Table; Bdiv_human
+C,Bdiv_028030,"membrane protein, putative",4.78881774264323,10.1371/journal.pbio.3001816; S3 Table; Bdiv_human
+C,Bdiv_023990c,apical membrane antigen 1,3.6923883293033,10.1371/journal.pbio.3001816; S3 Table; Bdiv_human
+C,Bdiv_013580c,hypothetical protein,3.50149494856125,10.1371/journal.pbio.3001816; S3 Table; Bdiv_human

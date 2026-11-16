@@ -1,0 +1,4 @@
+input_file,source_in_CIQ,source_sha256,meaning
+gene_annotation.csv,scratch/outputs/foundation/current/01_inputs/PiroplasmaDB68_Bdivergens1802A_gene_annotation.csv,7f0314b099d148e2b593098df0ee857cce64344043cf2e101433c6fca2136ae0,Release 68 gene descriptions for count-matrix IDs.
+WT0_phase_labels.csv,scratch/outputs/explore/14_seurat_standard_QC/SAMS_analysis/tables/all_current_cells_clock_and_phase.csv.gz,b8d9e998a87665f5cb595c7dd17693c7cf5ce690e50eca5d055df3adf1af4f30,"Fixed BDiv0hrN wt0_phase labels, 9532 retained cells; explicit teaching input, not raw truth."
+phase_markers.csv,scratch/outputs/foundation/current/03_reference/review/public_atlas_markers_selected.csv,2c2f71cf96b8670b598ba9896defb89a723a2aeaef31dede1b9bc8bd92a5b9b9,Top 3 available markers per phase by published avg_log2FC from the selected atlas S3 Bdiv_human markers.
